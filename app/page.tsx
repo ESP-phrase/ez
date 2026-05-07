@@ -5,6 +5,7 @@ import HowItWorks from "@/components/landing/how-it-works";
 import Features from "@/components/landing/features";
 import SocialProof from "@/components/landing/social-proof";
 import Pricing from "@/components/landing/pricing";
+import TestimonialCta from "@/components/landing/testimonial-cta";
 import Faq from "@/components/landing/faq";
 import Footer from "@/components/landing/footer";
 import Link from "next/link";
@@ -59,6 +60,7 @@ export default function LandingPage() {
         <Features />
         <SocialProof />
         <Pricing />
+        <TestimonialCta />
         <Faq />
 
         {/* Final CTA */}
@@ -72,7 +74,7 @@ export default function LandingPage() {
               Trusted by over 300 traders. Start for $1. Cancel any time.
             </p>
             <Link
-              href="/login"
+              href="/start"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold hover:from-blue-500 hover:to-blue-400 transition-all shadow-md shadow-blue-950/40"
             >
               Start for $1
