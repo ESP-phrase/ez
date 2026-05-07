@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TrendingUp, ArrowRight, Star, Mail, RotateCcw } from "lucide-react";
@@ -8,7 +8,7 @@ import GoatLogo from "@/components/goat-logo";
 
 type Step = "email" | "code";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
   const [step, setStep] = useState<Step>("email");
@@ -28,7 +28,6 @@ export default function LoginPage() {
     if (err) setGoogleError("Google sign-in failed. Please try again.");
   }, [router, params]);
 
-  // Countdown timer for resend cooldown
   useEffect(() => {
     if (resendCooldown <= 0) return;
     const t = setInterval(() => setResendCooldown((c) => c - 1), 1000);
@@ -81,9 +80,8 @@ export default function LoginPage() {
   };
 
   const handleCodeChange = (i: number, val: string) => {
-    if (!/^\d*$/.test(val)) return; // digits only
+    if (!/^\d*$/.test(val)) return;
     const next = [...code];
-    // Allow paste of full 6-digit code
     if (val.length > 1) {
       const digits = val.replace(/\D/g, "").slice(0, 6).split("");
       const filled = [...code];
@@ -101,9 +99,7 @@ export default function LoginPage() {
   };
 
   const handleCodeKeyDown = (i: number, e: React.KeyboardEvent) => {
-    if (e.key === "Backspace" && !code[i] && i > 0) {
-      codeRefs.current[i - 1]?.focus();
-    }
+    if (e.key === "Backspace" && !code[i] && i > 0) codeRefs.current[i - 1]?.focus();
   };
 
   return (
@@ -125,27 +121,19 @@ export default function LoginPage() {
             market I never would&apos;ve caught on my own.&rdquo;
           </blockquote>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">
-              MT
-            </div>
+            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white">MT</div>
             <div>
               <p className="text-sm font-semibold text-white">Marcus T.</p>
               <p className="text-xs text-white/35">@sharpblocks · +$1,240 this month</p>
             </div>
           </div>
           <div className="flex gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-3 h-3 fill-blue-400 text-blue-400" />
-            ))}
+            {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-blue-400 text-blue-400" />)}
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          {[
-            { value: "300+", label: "Traders" },
-            { value: "73%", label: "Win Rate" },
-            { value: "$4.2M+", label: "Profits" },
-          ].map((s) => (
+          {[{ value: "300+", label: "Traders" }, { value: "73%", label: "Win Rate" }, { value: "$4.2M+", label: "Profits" }].map((s) => (
             <div key={s.label} className="surface-card rounded-xl p-4 text-center">
               <p className="text-lg font-extrabold text-gradient">{s.value}</p>
               <p className="text-[11px] text-white/30">{s.label}</p>
@@ -168,16 +156,12 @@ export default function LoginPage() {
         <div className="w-full max-w-sm">
           {step === "email" ? (
             <>
-              {/* Email step */}
               <div className="w-12 h-12 rounded-2xl bg-blue-600/15 border border-blue-400/20 flex items-center justify-center mb-6">
                 <GoatLogo size={28} />
               </div>
               <h1 className="text-2xl font-extrabold text-white mb-1 tracking-tight">Sign in to PolyGoat</h1>
-              <p className="text-white/35 text-sm mb-6">
-                Enter your email and we&apos;ll send you a 6-digit code — no password needed.
-              </p>
+              <p className="text-white/35 text-sm mb-6">Enter your email and we&apos;ll send you a 6-digit code — no password needed.</p>
 
-              {/* Google */}
               {googleError && <p className="text-red-400 text-xs px-1 mb-3">{googleError}</p>}
               <a
                 href="/api/auth/google"
@@ -203,55 +187,31 @@ export default function LoginPage() {
                 <div>
                   <label className="block text-xs font-medium text-white/40 mb-1.5">Email address</label>
                   <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    autoFocus
+                    type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com" autoFocus
                     className="w-full px-4 py-2.5 rounded-xl surface-card text-white placeholder-white/15 text-sm focus:outline-none focus:border-blue-400/40 transition-colors"
                   />
                 </div>
-
                 {error && <p className="text-red-400 text-xs px-1">{error}</p>}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2"
-                >
-                  {loading ? (
-                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      Send code
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
+                <button type="submit" disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2">
+                  {loading ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <><span>Send code</span><ArrowRight className="w-4 h-4" /></>}
                 </button>
               </form>
             </>
           ) : (
             <>
-              {/* Code step */}
               <div className="w-12 h-12 rounded-2xl bg-blue-600/15 border border-blue-400/20 flex items-center justify-center mb-6">
                 <GoatLogo size={28} />
               </div>
               <h1 className="text-2xl font-extrabold text-white mb-1 tracking-tight">Check your email</h1>
-              <p className="text-white/35 text-sm mb-2">
-                We sent a 6-digit code to
-              </p>
+              <p className="text-white/35 text-sm mb-2">We sent a 6-digit code to</p>
               <p className="text-blue-400 text-sm font-semibold mb-8">{email}</p>
 
-              {/* 6-digit code input */}
               <div className="flex gap-2 mb-6 justify-center">
                 {code.map((digit, i) => (
-                  <input
-                    key={i}
-                    ref={(el) => { codeRefs.current[i] = el; }}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    value={digit}
+                  <input key={i} ref={(el) => { codeRefs.current[i] = el; }}
+                    type="text" inputMode="numeric" maxLength={6} value={digit}
                     onChange={(e) => handleCodeChange(i, e.target.value)}
                     onKeyDown={(e) => handleCodeKeyDown(i, e)}
                     className="w-11 h-14 rounded-xl surface-card text-white text-xl font-bold text-center focus:outline-none focus:border-blue-400/60 transition-colors caret-transparent"
@@ -260,27 +220,17 @@ export default function LoginPage() {
                 ))}
               </div>
 
-              {loading && (
-                <div className="flex justify-center mb-4">
-                  <div className="w-5 h-5 border-2 border-blue-400/30 border-t-blue-400 rounded-full animate-spin" />
-                </div>
-              )}
-
+              {loading && <div className="flex justify-center mb-4"><div className="w-5 h-5 border-2 border-blue-400/30 border-t-blue-400 rounded-full animate-spin" /></div>}
               {error && <p className="text-red-400 text-xs px-1 mb-4 text-center">{error}</p>}
 
               <p className="text-center text-white/30 text-xs mb-3">Didn&apos;t get it?</p>
               <div className="flex gap-2">
-                <button
-                  onClick={() => { setStep("email"); setCode(["","","","","",""]); setError(""); }}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl surface-card text-white/40 hover:text-white/70 text-xs font-medium transition-colors"
-                >
+                <button onClick={() => { setStep("email"); setCode(["","","","","",""]); setError(""); }}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl surface-card text-white/40 hover:text-white/70 text-xs font-medium transition-colors">
                   Change email
                 </button>
-                <button
-                  onClick={() => sendCode()}
-                  disabled={resendCooldown > 0 || loading}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl surface-card text-white/40 hover:text-white/70 text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                >
+                <button onClick={() => sendCode()} disabled={resendCooldown > 0 || loading}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl surface-card text-white/40 hover:text-white/70 text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                   <RotateCcw className="w-3 h-3" />
                   {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend code"}
                 </button>
@@ -290,12 +240,19 @@ export default function LoginPage() {
 
           <p className="text-center text-[11px] text-white/20 mt-8">
             By continuing, you agree to our{" "}
-            <Link href="#" className="underline hover:text-white/40">Terms</Link>{" "}
-            and{" "}
+            <Link href="#" className="underline hover:text-white/40">Terms</Link>{" "}and{" "}
             <Link href="#" className="underline hover:text-white/40">Privacy Policy</Link>.
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
