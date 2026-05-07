@@ -124,12 +124,13 @@ export async function POST(request: Request) {
             },
           });
 
-          // Reddit server-side conversion
+          // Reddit server-side conversion (with full match keys + dedup ID)
           const amountCents = invoice.amount_paid ?? 100;
           trackRedditConversion({
             trackingType: "Purchase",
             email: user.email,
             externalId: user.id,
+            conversionId: invoice.id,   // deduplicates with client-side pixel
             value: amountCents,
             currency: invoice.currency?.toUpperCase() ?? "USD",
           }).catch((err) => console.error("Reddit CAPI error:", err));

@@ -9,11 +9,21 @@ const REDDIT_CAPI_URL = `https://ads-api.reddit.com/api/v3/pixels/${REDDIT_PIXEL
 interface RedditConversionEvent {
   trackingType: "Purchase" | "Lead" | "SignUp" | "PageVisit" | "Custom";
   actionSource?: "website" | "app" | "offline";
+  // Match keys
+  clickId?: string;        // rdt_cid from URL when user clicked Reddit ad
   email?: string;
-  externalId?: string;
+  phoneNumber?: string;
+  externalId?: string;     // your internal user ID
   ipAddress?: string;
   userAgent?: string;
-  value?: number;   // in cents (e.g. 100 = $1.00)
+  uuid?: string;           // Reddit UUID from rdt cookie
+  idfa?: string;           // iOS ad ID
+  aaid?: string;           // Android ad ID
+  screenWidth?: number;
+  screenHeight?: number;
+  // Conversion
+  conversionId?: string;   // invoice/order ID — used to deduplicate with client pixel
+  value?: number;          // in cents
   currency?: string;
 }
 
@@ -24,31 +34,50 @@ export async function trackRedditConversion(event: RedditConversionEvent) {
     return;
   }
 
+  // Build user object — only include fields we have
+  const user: Record<string, unknown> = {};
+  if (event.email)       user.email        = await hashSHA256(event.email);
+  if (event.phoneNumber) user.phone_number = await hashSHA256(event.phoneNumber);
+  if (event.externalId)  user.external_id  = await hashSHA256(event.externalId);
+  if (event.ipAddress)   user.ip_address   = event.ipAddress;
+  if (event.userAgent)   user.user_agent   = event.userAgent;
+  if (event.uuid)        user.uuid         = event.uuid;
+  if (event.idfa)        user.idfa         = event.idfa;
+  if (event.aaid)        user.aaid         = event.aaid;
+  if (event.screenWidth && event.screenHeight) {
+    user.screen_dimensions = {
+      width: event.screenWidth,
+      height: event.screenHeight,
+    };
+  }
+
+  const eventPayload: Record<string, unknown> = {
+    event_at:      Date.now(),
+    action_source: event.actionSource ?? "website",
+    type: {
+      tracking_type: event.trackingType,
+    },
+    user,
+  };
+
+  if (event.clickId) {
+    eventPayload.click_id = event.clickId;
+  }
+
+  if (event.value !== undefined) {
+    eventPayload.value    = event.value;
+    eventPayload.currency = event.currency ?? "USD";
+  }
+
+  if (event.conversionId) {
+    eventPayload.metadata = {
+      conversion_id: event.conversionId,
+    };
+  }
+
   const payload = {
     data: {
-      events: [
-        {
-          event_at: Date.now(),
-          action_source: event.actionSource ?? "website",
-          type: {
-            tracking_type: event.trackingType,
-          },
-          ...(event.value !== undefined ? {
-            value: event.value,
-            currency: event.currency ?? "USD",
-          } : {}),
-          user: {
-            ...(event.email
-              ? { email: await hashSHA256(event.email) }
-              : {}),
-            ...(event.externalId
-              ? { external_id: await hashSHA256(event.externalId) }
-              : {}),
-            ...(event.ipAddress ? { ip_address: event.ipAddress } : {}),
-            ...(event.userAgent ? { user_agent: event.userAgent } : {}),
-          },
-        },
-      ],
+      events: [eventPayload],
     },
   };
 
@@ -56,7 +85,7 @@ export async function trackRedditConversion(event: RedditConversionEvent) {
     const res = await fetch(REDDIT_CAPI_URL, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
