@@ -155,7 +155,7 @@ export default function StartPage() {
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
               ) : (
-                <>Start for $1 <ArrowRight className="w-4 h-4" /></>
+                <>Start winning for $1 <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>

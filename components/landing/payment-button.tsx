@@ -65,7 +65,7 @@ export default function PaymentButton({
       >
         {children || (
           <>
-            Start for $1 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            Start winning for $1 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </>
         )}
       </button>
