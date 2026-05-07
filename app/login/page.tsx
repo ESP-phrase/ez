@@ -1,27 +1,32 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TrendingUp, ArrowRight, Star, Mail, RotateCcw } from "lucide-react";
+import GoatLogo from "@/components/goat-logo";
 
 type Step = "email" | "code";
 
 export default function LoginPage() {
   const router = useRouter();
+  const params = useSearchParams();
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [googleError, setGoogleError] = useState("");
   const codeRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && localStorage.getItem("pg_auth") === "true") {
       router.replace("/dashboard");
     }
-  }, [router]);
+    const err = params.get("error");
+    if (err) setGoogleError("Google sign-in failed. Please try again.");
+  }, [router, params]);
 
   // Countdown timer for resend cooldown
   useEffect(() => {
@@ -107,7 +112,7 @@ export default function LoginPage() {
       <div className="hidden lg:flex flex-col justify-between w-[44%] p-12 border-r border-white/5">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-600/15 border border-blue-400/30 flex items-center justify-center ring-1 ring-white/10">
-            <TrendingUp className="w-4 h-4 text-blue-400" />
+            <GoatLogo size={20} />
           </div>
           <span className="text-base font-bold text-white tracking-tight">
             Poly<span className="text-gradient">Goat</span>
@@ -153,7 +158,7 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col items-center justify-center p-6">
         <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden">
           <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-400/30 flex items-center justify-center">
-            <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
+            <GoatLogo size={18} />
           </div>
           <span className="text-base font-bold text-white tracking-tight">
             Poly<span className="text-gradient">Goat</span>
@@ -165,12 +170,34 @@ export default function LoginPage() {
             <>
               {/* Email step */}
               <div className="w-12 h-12 rounded-2xl bg-blue-600/15 border border-blue-400/20 flex items-center justify-center mb-6">
-                <Mail className="w-5 h-5 text-blue-400" />
+                <GoatLogo size={28} />
               </div>
               <h1 className="text-2xl font-extrabold text-white mb-1 tracking-tight">Sign in to PolyGoat</h1>
-              <p className="text-white/35 text-sm mb-8">
+              <p className="text-white/35 text-sm mb-6">
                 Enter your email and we&apos;ll send you a 6-digit code — no password needed.
               </p>
+
+              {/* Google */}
+              {googleError && <p className="text-red-400 text-xs px-1 mb-3">{googleError}</p>}
+              <a
+                href="/api/auth/google"
+                className="w-full flex items-center justify-center gap-3 py-2.5 rounded-xl surface-card text-white/80 hover:text-white text-sm font-medium transition-all hover:bg-white/5 mb-4"
+                style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
+                  <path d="M47.5 24.5c0-1.6-.1-3.2-.4-4.7H24v8.9h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.5 7.3-17.4z" fill="#4285F4"/>
+                  <path d="M24 48c6.5 0 12-2.2 16-5.9l-7.9-6c-2.2 1.5-5 2.3-8.1 2.3-6.2 0-11.5-4.2-13.4-9.9H2.5v6.2C6.5 42.6 14.7 48 24 48z" fill="#34A853"/>
+                  <path d="M10.6 28.5A14.9 14.9 0 0 1 10.6 19.5v-6.2H2.5A23.9 23.9 0 0 0 0 24c0 3.9.9 7.5 2.5 10.7l8.1-6.2z" fill="#FBBC05"/>
+                  <path d="M24 9.5c3.5 0 6.6 1.2 9.1 3.5l6.8-6.8C35.9 2.2 30.5 0 24 0 14.7 0 6.5 5.4 2.5 13.3l8.1 6.2C12.5 13.7 17.8 9.5 24 9.5z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+              </a>
+
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex-1 h-px bg-white/8" />
+                <span className="text-white/20 text-xs">or</span>
+                <div className="flex-1 h-px bg-white/8" />
+              </div>
 
               <form onSubmit={sendCode} className="space-y-4">
                 <div>
@@ -207,7 +234,7 @@ export default function LoginPage() {
             <>
               {/* Code step */}
               <div className="w-12 h-12 rounded-2xl bg-blue-600/15 border border-blue-400/20 flex items-center justify-center mb-6">
-                <Mail className="w-5 h-5 text-blue-400" />
+                <GoatLogo size={28} />
               </div>
               <h1 className="text-2xl font-extrabold text-white mb-1 tracking-tight">Check your email</h1>
               <p className="text-white/35 text-sm mb-2">
