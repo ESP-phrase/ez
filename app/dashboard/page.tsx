@@ -94,6 +94,15 @@ function SuccessBanner({ sessionId, onDismiss }: { sessionId: string; onDismiss:
             const u = raw ? JSON.parse(raw) : {};
             localStorage.setItem("pg_user", JSON.stringify({ ...u, plan: data.plan }));
           } catch { /* ignore */ }
+
+          // TikTok conversion event
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const ttq = (window as any).ttq;
+            if (ttq) {
+              ttq.track("Subscribe", { value: 1.00, currency: "USD" });
+            }
+          } catch { /* ignore */ }
         }
       })
       .catch(() => { /* ignore */ });
