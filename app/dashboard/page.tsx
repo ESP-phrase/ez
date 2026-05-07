@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Activity,
   DollarSign,
+  LogOut,
 } from "lucide-react";
 
 interface User { email: string; name: string }
@@ -134,6 +135,13 @@ export default function DashboardPage() {
               </div>
               <ChevronDown className="w-3 h-3 text-slate-400 group-hover:text-slate-600 transition-colors" />
             </div>
+            <button
+              onClick={() => { localStorage.removeItem("pg_auth"); localStorage.removeItem("pg_user"); window.location.href = "/login"; }}
+              className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center hover:border-red-200 hover:bg-red-50 transition-all group"
+              title="Log out"
+            >
+              <LogOut className="w-4 h-4 text-slate-400 group-hover:text-red-500 transition-colors" />
+            </button>
           </div>
         </header>
 
