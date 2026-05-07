@@ -15,7 +15,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="hero-bg relative overflow-hidden min-h-screen flex flex-col items-center justify-start text-center px-4 pt-32 pb-20">
+    <section className="hero-bg relative overflow-hidden min-h-screen flex flex-col items-center justify-start text-center px-4 pt-24 pb-20">
       <div className="pointer-events-none absolute inset-0 animate-hero-grid opacity-20 [background-image:linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] [background-size:48px_48px]" />
       <div className="pointer-events-none absolute -top-20 -left-16 h-72 w-72 rounded-full bg-blue-500/25 blur-3xl animate-hero-orb" />
       <div className="pointer-events-none absolute top-24 -right-10 h-80 w-80 rounded-full bg-violet-400/15 blur-3xl animate-hero-orb [animation-delay:2s]" />
@@ -61,7 +61,7 @@ export default function Hero() {
       </div>
 
       {/* ── Dashboard Mockup (High-Fidelity) ── */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto animate-float">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 animate-float">
         <div className="rounded-2xl border border-white/10 overflow-hidden shadow-2xl shadow-black/60 ring-1 ring-white/5" style={{ background: "#f8f9fa" }}>
 
           {/* Browser chrome */}

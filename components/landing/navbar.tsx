@@ -27,7 +27,7 @@ export default function Navbar() {
         ? "bg-[#030b18]/90 backdrop-blur-xl border-b border-white/8 shadow-lg shadow-black/30"
         : "bg-transparent"
     }`}>
-      <div className="max-w-6xl mx-auto px-4 w-full">
+      <div className="max-w-7xl mx-auto px-6 w-full">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-sm shadow-blue-900/50 overflow-hidden p-1">
