@@ -35,12 +35,13 @@ export async function POST(req: Request) {
 
     // Find or create user
     let user = await db.user.findUnique({ where: { email: emailLower } });
+    const isNew = !user;
     if (!user) {
       const name = emailLower.split("@")[0];
       user = await db.user.create({ data: { email: emailLower, name } });
     }
 
-    return NextResponse.json({ user: { id: user.id, email: user.email, name: user.name } });
+    return NextResponse.json({ user: { id: user.id, email: user.email, name: user.name }, isNew });
   } catch (err) {
     console.error("verify-otp error:", err);
     return NextResponse.json({ error: "Server error." }, { status: 500 });

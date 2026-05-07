@@ -6,7 +6,7 @@ import Link from "next/link";
 import { TrendingUp, ArrowRight, Star, Mail, RotateCcw } from "lucide-react";
 import GoatLogo from "@/components/goat-logo";
 
-type Step = "email" | "code";
+type Step = "email" | "code" | "name";
 
 function LoginForm() {
   const router = useRouter();
@@ -18,6 +18,8 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
   const [googleError, setGoogleError] = useState("");
+  const [name, setName] = useState("");
+  const [pendingUser, setPendingUser] = useState<{ id: string; email: string; name: string } | null>(null);
   const codeRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -66,12 +68,18 @@ function LoginForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code: fullCode }),
       });
-      const json = await res.json() as { user?: { email: string; name: string }; error?: string };
+      const json = await res.json() as { user?: { id: string; email: string; name: string }; isNew?: boolean; error?: string };
       if (!res.ok || json.error) { setError(json.error ?? "Verification failed."); setLoading(false); return; }
       if (json.user) {
-        localStorage.setItem("pg_auth", "true");
-        localStorage.setItem("pg_user", JSON.stringify(json.user));
-        router.push("/dashboard");
+        if (json.isNew) {
+          setPendingUser(json.user);
+          setStep("name");
+          setLoading(false);
+        } else {
+          localStorage.setItem("pg_auth", "true");
+          localStorage.setItem("pg_user", JSON.stringify(json.user));
+          router.push("/dashboard");
+        }
       }
     } catch {
       setError("Could not reach server.");
@@ -100,6 +108,32 @@ function LoginForm() {
 
   const handleCodeKeyDown = (i: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace" && !code[i] && i > 0) codeRefs.current[i - 1]?.focus();
+  };
+
+  const saveName = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !pendingUser) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/set-name", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: pendingUser.email, name }),
+      });
+      const json = await res.json() as { user?: { id: string; email: string; name: string }; error?: string };
+      const user = json.user ?? { ...pendingUser, name };
+      localStorage.setItem("pg_auth", "true");
+      localStorage.setItem("pg_user", JSON.stringify(user));
+      router.push("/dashboard");
+    } catch {
+      // Still let them in even if name save fails
+      localStorage.setItem("pg_auth", "true");
+      localStorage.setItem("pg_user", JSON.stringify({ ...pendingUser, name }));
+      router.push("/dashboard");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -154,7 +188,40 @@ function LoginForm() {
         </Link>
 
         <div className="w-full max-w-sm">
-          {step === "email" ? (
+          {step === "name" ? (
+            <>
+              <div className="w-12 h-12 rounded-2xl bg-blue-600/15 border border-blue-400/20 flex items-center justify-center mb-6">
+                <GoatLogo size={28} />
+              </div>
+              <h1 className="text-2xl font-extrabold text-white mb-1 tracking-tight">What&apos;s your name?</h1>
+              <p className="text-white/35 text-sm mb-8">We&apos;ll use this to personalise your dashboard.</p>
+              <form onSubmit={saveName} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-white/40 mb-1.5">Your name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Marcus"
+                    autoFocus
+                    className="w-full px-4 py-2.5 rounded-xl surface-card text-white placeholder-white/15 text-sm focus:outline-none focus:border-blue-400/40 transition-colors"
+                  />
+                </div>
+                {error && <p className="text-red-400 text-xs px-1">{error}</p>}
+                <button type="submit" disabled={loading || !name.trim()}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                  {loading ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <><span>Go to dashboard</span><ArrowRight className="w-4 h-4" /></>}
+                </button>
+                <button type="button" onClick={() => {
+                  localStorage.setItem("pg_auth", "true");
+                  localStorage.setItem("pg_user", JSON.stringify(pendingUser));
+                  router.push("/dashboard");
+                }} className="w-full text-center text-xs text-white/20 hover:text-white/40 transition-colors pt-1">
+                  Skip for now
+                </button>
+              </form>
+            </>
+          ) : step === "email" ? (
             <>
               <div className="w-12 h-12 rounded-2xl bg-blue-600/15 border border-blue-400/20 flex items-center justify-center mb-6">
                 <GoatLogo size={28} />
