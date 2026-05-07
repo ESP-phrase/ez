@@ -1,49 +1,55 @@
 /**
- * Reddit Conversions API (server-side)
- * Docs: https://ads.reddit.com/docs/conversions
+ * Reddit Conversions API v3 (server-side)
+ * Endpoint: https://ads-api.reddit.com/api/v3/pixels/{pixel_id}/conversion_events
  */
 
 const REDDIT_PIXEL_ID = "a2_iyvdtsc4pdrn";
-const REDDIT_CAPI_URL = `https://ads-api.reddit.com/api/v2.0/conversions/events/${REDDIT_PIXEL_ID}`;
+const REDDIT_CAPI_URL = `https://ads-api.reddit.com/api/v3/pixels/${REDDIT_PIXEL_ID}/conversion_events`;
 
 interface RedditConversionEvent {
   trackingType: "Purchase" | "Lead" | "SignUp" | "PageVisit" | "Custom";
+  actionSource?: "website" | "app" | "offline";
   email?: string;
   externalId?: string;
   ipAddress?: string;
   userAgent?: string;
   value?: number;   // in cents (e.g. 100 = $1.00)
   currency?: string;
-  conversionId?: string; // unique per event to deduplicate with pixel
-  testId?: string;  // only for testing — remove before production
 }
 
 export async function trackRedditConversion(event: RedditConversionEvent) {
   const accessToken = process.env.REDDIT_ADS_ACCESS_TOKEN;
   if (!accessToken) {
-    console.warn("REDDIT_ADS_ACCESS_TOKEN not set — skipping server-side conversion");
+    console.warn("REDDIT_ADS_ACCESS_TOKEN not set — skipping Reddit CAPI");
     return;
   }
 
   const payload = {
-    ...(event.testId ? { test_mode: true, test_id: event.testId } : {}),
-    events: [
-      {
-        event_at: new Date().toISOString(),
-        event_type: {
-          tracking_type: event.trackingType,
+    data: {
+      events: [
+        {
+          event_at: Date.now(),
+          action_source: event.actionSource ?? "website",
+          type: {
+            tracking_type: event.trackingType,
+          },
+          ...(event.value !== undefined ? {
+            value: event.value,
+            currency: event.currency ?? "USD",
+          } : {}),
+          user: {
+            ...(event.email
+              ? { email: await hashSHA256(event.email) }
+              : {}),
+            ...(event.externalId
+              ? { external_id: await hashSHA256(event.externalId) }
+              : {}),
+            ...(event.ipAddress ? { ip_address: event.ipAddress } : {}),
+            ...(event.userAgent ? { user_agent: event.userAgent } : {}),
+          },
         },
-        ...(event.conversionId ? { click_id: event.conversionId } : {}),
-        value: event.value ?? 0,
-        currency: event.currency ?? "USD",
-        user: {
-          ...(event.email ? { email: hashSHA256(event.email) } : {}),
-          ...(event.externalId ? { external_id: hashSHA256(event.externalId) } : {}),
-          ...(event.ipAddress ? { ip_address: event.ipAddress } : {}),
-          ...(event.userAgent ? { user_agent: event.userAgent } : {}),
-        },
-      },
-    ],
+      ],
+    },
   };
 
   try {
@@ -60,7 +66,7 @@ export async function trackRedditConversion(event: RedditConversionEvent) {
       const text = await res.text();
       console.error("Reddit CAPI error:", res.status, text);
     } else {
-      console.log("Reddit CAPI: conversion tracked successfully");
+      console.log("Reddit CAPI: Purchase tracked ✓");
     }
   } catch (err) {
     console.error("Reddit CAPI fetch failed:", err);
