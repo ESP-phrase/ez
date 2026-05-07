@@ -23,6 +23,7 @@ import {
   X,
   Settings,
 } from "lucide-react";
+import posthog from "posthog-js";
 
 interface User { email: string; name: string; plan?: string }
 
@@ -94,6 +95,9 @@ function SuccessBanner({ sessionId, onDismiss }: { sessionId: string; onDismiss:
             const u = raw ? JSON.parse(raw) : {};
             localStorage.setItem("pg_user", JSON.stringify({ ...u, plan: data.plan }));
           } catch { /* ignore */ }
+
+          // PostHog conversion event
+          try { posthog.capture("subscription_started", { plan: data.plan, value: 1 }); } catch { /* ignore */ }
 
           // TikTok conversion event
           try {
@@ -199,7 +203,7 @@ function DashboardInner() {
             </button>
             {!isPro && (
               <button
-                onClick={() => setShowUpgrade(true)}
+                onClick={() => { setShowUpgrade(true); posthog.capture("upgrade_modal_opened", { source: "header" }); }}
                 className="px-3 py-2 rounded-xl border border-blue-200 bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-all"
               >
                 Start trial
@@ -246,7 +250,7 @@ function DashboardInner() {
               <p className="text-sm text-blue-800 font-medium">You&apos;re on the free plan. Unlock all features for just <strong>$1</strong> your first month.</p>
             </div>
             <button
-              onClick={() => setShowUpgrade(true)}
+              onClick={() => { setShowUpgrade(true); posthog.capture("upgrade_modal_opened", { source: "nudge_banner" }); }}
               className="ml-4 flex-shrink-0 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-all"
             >
               Upgrade

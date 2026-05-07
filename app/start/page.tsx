@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Star, Shield, Lock, Zap } from "lucide-react";
 import GoatLogo from "@/components/goat-logo";
+import posthog from "posthog-js";
 
 const FEATURES = [
   "Unlimited AI market analysis",
@@ -26,21 +27,19 @@ export default function StartPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fire ViewContent when page loads
+  // Fire pixel + PostHog events on page load
   useEffect(() => {
-    rdt("track", "ViewContent", {
-      conversionId: genId("view_trial"),
-    });
+    rdt("track", "ViewContent", { conversionId: genId("view_trial") });
+    posthog.capture("viewed_start_page");
   }, []);
 
   const handleStart = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) { setError("Enter a valid email."); return; }
 
-    // Fire AddToCart when user submits email
-    rdt("track", "AddToCart", {
-      conversionId: genId("add_to_cart"),
-    });
+    // Fire AddToCart + PostHog when user submits email
+    rdt("track", "AddToCart", { conversionId: genId("add_to_cart") });
+    posthog.capture("checkout_initiated", { email });
 
     setLoading(true);
     setError("");

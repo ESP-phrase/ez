@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TrendingUp, ArrowRight, Star, Mail, RotateCcw } from "lucide-react";
 import GoatLogo from "@/components/goat-logo";
+import posthog from "posthog-js";
 
 type Step = "email" | "code" | "name";
 
@@ -49,6 +50,7 @@ function LoginForm() {
       });
       const json = await res.json() as { ok?: boolean; error?: string };
       if (!res.ok || json.error) { setError(json.error ?? "Failed to send code."); return; }
+      posthog.capture("otp_sent", { email });
       setStep("code");
       setResendCooldown(60);
       setTimeout(() => codeRefs.current[0]?.focus(), 100);
@@ -72,10 +74,14 @@ function LoginForm() {
       if (!res.ok || json.error) { setError(json.error ?? "Verification failed."); setLoading(false); return; }
       if (json.user) {
         if (json.isNew) {
+          posthog.capture("signup_completed", { email });
+          posthog.identify(json.user.id, { email: json.user.email, name: json.user.name });
           setPendingUser(json.user);
           setStep("name");
           setLoading(false);
         } else {
+          posthog.capture("login_completed", { email });
+          posthog.identify(json.user.id, { email: json.user.email, name: json.user.name });
           localStorage.setItem("pg_auth", "true");
           localStorage.setItem("pg_user", JSON.stringify(json.user));
           router.push("/dashboard");
