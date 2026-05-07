@@ -99,9 +99,14 @@ function SuccessBanner({ sessionId, onDismiss }: { sessionId: string; onDismiss:
           try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const ttq = (window as any).ttq;
-            if (ttq) {
-              ttq.track("Subscribe", { value: 1.00, currency: "USD" });
-            }
+            if (ttq) ttq.track("Subscribe", { value: 1.00, currency: "USD" });
+          } catch { /* ignore */ }
+
+          // Reddit conversion event
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const rdt = (window as any).rdt;
+            if (rdt) rdt("track", "Purchase", { value: 1.00, currency: "USD" });
           } catch { /* ignore */ }
         }
       })
