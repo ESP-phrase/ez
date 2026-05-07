@@ -106,7 +106,11 @@ function SuccessBanner({ sessionId, onDismiss }: { sessionId: string; onDismiss:
           try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const rdt = (window as any).rdt;
-            if (rdt) rdt("track", "Purchase", { value: 1.00, currency: "USD" });
+            if (rdt) rdt("track", "Purchase", {
+              value: 1.00,
+              currency: "USD",
+              conversionId: `purchase_${sessionId}`,
+            });
           } catch { /* ignore */ }
         }
       })

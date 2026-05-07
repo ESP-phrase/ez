@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Star, Shield, Lock, Zap } from "lucide-react";
 import GoatLogo from "@/components/goat-logo";
@@ -13,14 +13,35 @@ const FEATURES = [
   "Smart risk scoring per bet",
 ];
 
+// Generate a unique ID for this session/event
+function genId(prefix: string) {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rdt(...args: unknown[]) { try { (window as any).rdt?.(...args); } catch { /* ignore */ } }
+
 export default function StartPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Fire ViewContent when page loads
+  useEffect(() => {
+    rdt("track", "ViewContent", {
+      conversionId: genId("view_trial"),
+    });
+  }, []);
+
   const handleStart = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) { setError("Enter a valid email."); return; }
+
+    // Fire AddToCart when user submits email
+    rdt("track", "AddToCart", {
+      conversionId: genId("add_to_cart"),
+    });
+
     setLoading(true);
     setError("");
     try {
