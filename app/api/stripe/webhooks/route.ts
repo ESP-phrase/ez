@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import Stripe from "stripe";
+import { trackRedditConversion } from "@/lib/reddit-capi";
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || "";
 
@@ -122,6 +123,17 @@ export async function POST(request: Request) {
               subscriptionStatus: "ACTIVE",
             },
           });
+
+          // Reddit server-side conversion
+          const amountCents = invoice.amount_paid ?? 100;
+          trackRedditConversion({
+            trackingType: "Purchase",
+            email: user.email,
+            externalId: user.id,
+            value: amountCents,
+            currency: invoice.currency?.toUpperCase() ?? "USD",
+            // testId: "t2_2dvq8e8lxg", // ← uncomment to test, remove for production
+          }).catch((err) => console.error("Reddit CAPI error:", err));
         }
         break;
       }
