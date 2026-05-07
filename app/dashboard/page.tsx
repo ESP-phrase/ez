@@ -6,6 +6,7 @@ import Link from "next/link";
 import Sidebar from "@/components/dashboard/sidebar";
 import AnalyzerPanel from "@/components/dashboard/analyzer-panel";
 import CopyPanel from "@/components/dashboard/copy-panel";
+import UpgradeModal from "@/components/dashboard/upgrade-modal";
 import {
   ScanSearch,
   Copy,
@@ -83,6 +84,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -112,6 +114,13 @@ export default function DashboardPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-50" suppressHydrationWarning>
+      {showUpgrade && (
+        <UpgradeModal
+          onClose={() => setShowUpgrade(false)}
+          userEmail={user.email}
+          userName={user.name}
+        />
+      )}
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -126,9 +135,9 @@ export default function DashboardPage() {
               <Bell className="w-4 h-4 text-slate-500" />
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 ring-2 ring-white" />
             </button>
-            <Link href="#" className="px-3 py-2 rounded-xl border border-blue-200 bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-all">
+            <button onClick={() => setShowUpgrade(true)} className="px-3 py-2 rounded-xl border border-blue-200 bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-all">
               Start trial
-            </Link>
+            </button>
             <div className="flex items-center gap-1.5 cursor-pointer group rounded-xl border border-slate-200 bg-white px-2 py-1.5">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-[11px] font-bold text-white">
                 {initials}
