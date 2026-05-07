@@ -48,13 +48,9 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
-      subscription_data: {
-        trial_settings: {
-          end_behavior: { missing_payment_method: "cancel" },
-        },
-        trial_period_days: 30,
-      },
-      payment_method_collection: "always",
+      discounts: process.env.STRIPE_INTRO_COUPON_ID
+        ? [{ coupon: process.env.STRIPE_INTRO_COUPON_ID }]
+        : [],
       success_url: `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/#pricing`,
       metadata: { userId: user.id, plan },
