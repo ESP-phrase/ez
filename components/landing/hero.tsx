@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Star, Shield, Users } from "lucide-react";
 
 export default function Hero() {
@@ -60,152 +61,37 @@ export default function Hero() {
         <div className="flex items-center gap-1.5"><Users className="w-3 h-3 text-blue-400" /><span className="text-white/60">Polymarket, Kalshi & more</span></div>
       </div>
 
-      {/* ── Dashboard Mockup (High-Fidelity) ── */}
+      {/* ── Real Dashboard Screenshot ── */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 animate-float">
-        <div className="rounded-2xl border border-white/10 overflow-hidden shadow-2xl shadow-black/60 ring-1 ring-white/5" style={{ background: "#f8f9fa" }}>
-
-          {/* Browser chrome */}
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-200" style={{ background: "#ffffff" }}>
+        {/* Browser chrome wrapper */}
+        <div className="rounded-2xl border border-white/10 overflow-hidden shadow-2xl shadow-black/70 ring-1 ring-white/5">
+          {/* Fake browser bar */}
+          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/8" style={{ background: "#0d1526" }}>
             <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-              <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
             </div>
-            <div className="flex-1 mx-4 h-5 rounded-md bg-gray-100 flex items-center justify-center">
-              <span className="text-[10px] text-gray-400">app.polygoat.io/dashboard</span>
-            </div>
-          </div>
-
-          <div className="flex" style={{ minHeight: 480, background: "#fafbfc" }}>
-            {/* Sidebar */}
-            <div className="w-56 border-r border-gray-200 flex flex-col gap-1 px-4 py-5 flex-shrink-0 bg-white">
-              {/* Logo */}
-              <div className="flex items-center gap-3 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">🐐</div>
-                <div>
-                  <div className="text-xs font-bold text-gray-900">PolyGoat</div>
-                  <div className="text-[11px] text-gray-500">Trader workspace</div>
-                </div>
-              </div>
-              {/* Nav items */}
-              {[
-                { icon: "📊", label: "AI Analyzer", color: "text-blue-600" },
-                { icon: "📋", label: "Copy Trader", color: "text-indigo-600" },
-                { icon: "⚡", label: "BTC Edge", color: "text-violet-600", highlight: true },
-                { icon: "🧪", label: "BTC Backtest", color: "text-emerald-600" },
-                { icon: "🏆", label: "Leaderboard", color: "text-amber-600", active: true },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                    item.active
-                      ? "bg-amber-500 text-white shadow-sm"
-                      : item.highlight
-                      ? "bg-violet-50 text-violet-700 border border-violet-200"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  <span className="text-base">{item.icon}</span>
-                  {item.label}
-                </div>
-              ))}
-            </div>
-
-            {/* Main content */}
-            <div className="flex-1 p-6 space-y-5 overflow-hidden">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs font-semibold text-blue-600 tracking-wider uppercase mb-1">Daily Briefing</div>
-                  <div className="text-xl font-bold text-gray-900">Welcome back, Lkhjlkhlk</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button className="w-9 h-9 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-400 hover:border-gray-300">🔔</button>
-                  <button className="px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700">Start trial</button>
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-xs font-bold text-white">LK</div>
-                </div>
-              </div>
-
-              {/* Stat cards */}
-              <div className="grid grid-cols-3 gap-4">
-                {[
-                  { icon: "📈", label: "Win-rate trend", value: "68.4%", sub: "+5.2% this week", color: "blue" },
-                  { icon: "⚡", label: "Active signals", value: "14", sub: "5 high conviction", color: "violet" },
-                  { icon: "$", label: "Paper P&L", value: "+$124.90", sub: "Unrealized", color: "emerald" },
-                ].map((card, i) => (
-                  <div key={i} className="rounded-xl border border-gray-200 bg-white p-4 flex items-start gap-3">
-                    <span className="text-xl">{card.icon}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{card.label}</div>
-                      <div className="text-2xl font-bold text-gray-900 mt-1">{card.value}</div>
-                      <div className="text-xs text-gray-400 mt-0.5">{card.sub}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Quick links */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-all">
-                  <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center text-lg flex-shrink-0">⚡</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold text-gray-900">BTC Edge</div>
-                    <div className="text-xs text-gray-500 mt-0.5">Live 5-min market · Price to beat · Real-time signal</div>
-                  </div>
-                  <span className="text-gray-400">→</span>
-                </div>
-                <div className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-all">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-lg flex-shrink-0">🧪</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold text-gray-900">Paper Trading</div>
-                    <div className="text-xs text-gray-500 mt-0.5">Simulate trades risk-free on live markets</div>
-                  </div>
-                  <span className="text-gray-400">→</span>
-                </div>
-              </div>
-
-              {/* AI Analyzer section */}
-              <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🤖</span>
-                    <span className="text-sm font-semibold text-gray-900">AI Analyzer</span>
-                  </div>
-                  <span className="text-gray-400">−</span>
-                </div>
-                <p className="text-xs text-gray-600 mb-3">Upload a market screenshot and get an instant AI-powered recommendation.</p>
-                <div className="rounded-lg border-2 border-dashed border-blue-300 bg-white/60 p-8 flex items-center justify-center mb-3">
-                  <div className="text-center">
-                    <div className="text-2xl mb-2">⬆️</div>
-                    <div className="text-xs text-gray-600">Drop a market screenshot or click to upload</div>
-                    <div className="text-[11px] text-gray-400 mt-1">PNG, JPEG, WebP</div>
-                  </div>
-                </div>
-                <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700">
-                  🔍 Analyze
-                </button>
-              </div>
-
-              {/* Copy Trader section */}
-              <div className="rounded-xl border border-gray-200 bg-white p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">📋</span>
-                    <span className="text-sm font-semibold text-gray-900">Copy Trader</span>
-                  </div>
-                  <span className="text-gray-400">−</span>
-                </div>
-                <p className="text-xs text-gray-600 mt-1">Follow top wallets and mirror their trades with configurable risk limits.</p>
-              </div>
+            <div className="flex-1 mx-4 h-5 rounded-md bg-white/5 flex items-center justify-center">
+              <span className="text-[10px] text-white/30">app.polygoat.io/dashboard</span>
             </div>
           </div>
+          {/* Screenshot */}
+          <Image
+            src="/dashboard-preview.png"
+            alt="PolyGoat dashboard — AI market analysis, copy trading, BTC signals"
+            width={1512}
+            height={900}
+            className="w-full h-auto block"
+            priority
+          />
         </div>
 
         {/* Floating badges */}
-        <div className="absolute -top-4 -right-4 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-900/40 border border-emerald-400/30">
+        <div className="absolute -top-4 -right-4 sm:-right-2 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-900/40 border border-emerald-400/30">
           73% Win Rate
         </div>
-        <div className="absolute -bottom-4 -left-4 bg-gradient-to-br from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-blue-900/40 border border-blue-400/30">
+        <div className="absolute -bottom-4 -left-4 sm:-left-2 bg-gradient-to-br from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-blue-900/40 border border-blue-400/30">
           Live BTC Signal ⚡
         </div>
       </div>
