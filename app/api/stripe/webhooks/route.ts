@@ -132,7 +132,7 @@ export async function POST(request: Request) {
             externalId: user.id,
             value: amountCents,
             currency: invoice.currency?.toUpperCase() ?? "USD",
-            // testId: "t2_2dvq8e8lxg", // ← uncomment to test, remove for production
+            testId: "t2_2dvq8e8lxg", // ← TESTING ONLY — remove before production
           }).catch((err) => console.error("Reddit CAPI error:", err));
         }
         break;
