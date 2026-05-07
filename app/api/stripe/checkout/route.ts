@@ -48,9 +48,9 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
-      discounts: process.env.STRIPE_INTRO_COUPON_ID
-        ? [{ coupon: process.env.STRIPE_INTRO_COUPON_ID }]
-        : [],
+      ...(process.env.STRIPE_INTRO_COUPON_ID
+        ? { discounts: [{ coupon: process.env.STRIPE_INTRO_COUPON_ID }] }
+        : {}),
       success_url: `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/#pricing`,
       metadata: { userId: user.id, plan },
@@ -58,9 +58,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (error) {
-    console.error("Checkout error:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Checkout error:", msg);
     return NextResponse.json(
-      { error: "Failed to create checkout session" },
+      { error: msg },
       { status: 500 }
     );
   }
