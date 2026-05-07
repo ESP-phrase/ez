@@ -1,0 +1,227 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum PositionStatus {
+  OPEN
+  CLOSED
+}
+
+enum TradeSide {
+  YES
+  NO
+}
+
+enum FillEventType {
+  OPEN
+  MARK
+  CLOSE
+}
+
+enum CopySignalSide {
+  YES
+  NO
+}
+
+enum CopyExecutionStatus {
+  QUEUED
+  SUBMITTED
+  FILLED
+  FAILED
+  SKIPPED
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  name         String
+  stripeCustomerId String?
+  plan         SubscriptionPlan @default(FREE)
+  subscriptionStatus SubscriptionStatus @default(INACTIVE)
+  subscriptionId String?
+  currentPeriodEnd DateTime?
+  createdAt    DateTime       @default(now())
+  analyzerRuns AnalyzerRun[]
+  positions    PaperPosition[]
+  copySubscriptions CopySubscription[]
+  copyExecutions    CopyExecution[]
+  copySetting       CopySetting?
+}
+
+model OtpToken {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  ELITE
+}
+
+enum SubscriptionStatus {
+  INACTIVE
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+model AnalyzerRun {
+  id              String   @id @default(cuid())
+  userId          String
+  imagePath       String
+  marketQuestion  String
+  platform        String
+  recommendation  String
+  confidence      Int
+  riskSummary     String
+  exitPlan        String
+  edge            String
+  rawModelJson    String
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Market {
+  id                String           @id @default(cuid())
+  platform          String
+  externalMarketId  String
+  title             String
+  outcomeA          String
+  outcomeB          String
+  createdAt         DateTime         @default(now())
+  snapshots         MarketSnapshot[]
+  positions         PaperPosition[]
+  copySignals       CopySignal[]
+
+  @@unique([platform, externalMarketId])
+}
+
+model MarketSnapshot {
+  id             String   @id @default(cuid())
+  marketId       String
+  outcomeAOdds   Float
+  outcomeBOdds   Float
+  fetchedAt      DateTime @default(now())
+  market         Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+}
+
+model PaperPosition {
+  id           String          @id @default(cuid())
+  userId       String
+  marketId     String
+  side         TradeSide
+  entryOdds    Float
+  stake        Float
+  quantity     Float
+  status       PositionStatus  @default(OPEN)
+  openedAt     DateTime        @default(now())
+  closedAt     DateTime?
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  market       Market          @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  events       PaperFillEvent[]
+}
+
+model PaperFillEvent {
+  id          String        @id @default(cuid())
+  positionId  String
+  eventType   FillEventType
+  odds        Float
+  stakeDelta  Float
+  timestamp   DateTime      @default(now())
+  position    PaperPosition @relation(fields: [positionId], references: [id], onDelete: Cascade)
+}
+
+model CopySourceWallet {
+  id             String             @id @default(cuid())
+  walletAddress  String             @unique
+  displayName    String
+  winRate        Float              @default(0)
+  roi30d         Float              @default(0)
+  pnl30d         Float              @default(0)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  subscriptions  CopySubscription[]
+  signals        CopySignal[]
+}
+
+model CopySubscription {
+  id              String           @id @default(cuid())
+  userId          String
+  sourceWalletId  String
+  isActive        Boolean          @default(true)
+  autoCopyEnabled Boolean          @default(false)
+  maxStakePerTrade Float           @default(25)
+  maxSlippagePct  Float            @default(1.5)
+  maxOpenExposure Float            @default(250)
+  sizeMultiplier  Float            @default(1)
+  allowedMarketsJson String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceWallet    CopySourceWallet @relation(fields: [sourceWalletId], references: [id], onDelete: Cascade)
+  executions      CopyExecution[]
+
+  @@unique([userId, sourceWalletId])
+}
+
+model CopySignal {
+  id               String          @id @default(cuid())
+  sourceWalletId   String
+  externalSignalId String          @unique
+  marketId         String
+  side             CopySignalSide
+  odds             Float
+  stake            Float
+  timestamp        DateTime
+  createdAt        DateTime        @default(now())
+  sourceWallet     CopySourceWallet @relation(fields: [sourceWalletId], references: [id], onDelete: Cascade)
+  market           Market          @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  executions       CopyExecution[]
+}
+
+model CopyExecution {
+  id               String              @id @default(cuid())
+  userId           String
+  subscriptionId   String
+  signalId         String
+  status           CopyExecutionStatus @default(QUEUED)
+  mirroredStake    Float
+  slippagePct      Float
+  idempotencyKey   String              @unique
+  externalOrderId  String?
+  errorMessage     String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription     CopySubscription    @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  signal           CopySignal          @relation(fields: [signalId], references: [id], onDelete: Cascade)
+}
+
+model CopySetting {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  killSwitchEnabled Boolean @default(false)
+  dailyLossLimit   Float    @default(200)
+  maxFailedExecs   Int      @default(5)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

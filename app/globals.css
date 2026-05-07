@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  --background: #040a14;
+  --surface: #0c1629;
+  --foreground: #f8fafc;
+  --muted: rgba(248, 250, 252, 0.55);
+  --card: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --trust-blue: #2563eb;
+  --trust-blue-light: #3b82f6;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+@keyframes hero-orb {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(12px, -16px, 0) scale(1.08); }
+}
+
+@keyframes hero-grid {
+  0% { opacity: 0.18; }
+  50% { opacity: 0.28; }
+  100% { opacity: 0.18; }
+}
+
+@keyframes hero-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.85); }
+  50% { opacity: 0.95; transform: scale(1.15); }
+}
+
+.animate-hero-orb {
+  animation: hero-orb 12s ease-in-out infinite;
+}
+
+.animate-hero-grid {
+  animation: hero-grid 7s ease-in-out infinite;
+}
+
+.animate-hero-twinkle {
+  animation: hero-twinkle 1.25s ease-in-out infinite;
+}
+
+/* White → sky-blue gradient reads clean & institutional */
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #93c5fd 45%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+}
+
+.hero-bg {
+  background:
+    radial-gradient(ellipse at 25% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+    #040a14;
+}
+
+.surface-card {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Scrollbar — subtle blue */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #040a14; }
+::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.35); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.55); }
