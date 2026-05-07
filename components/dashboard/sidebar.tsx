@@ -67,7 +67,7 @@ export default function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem("pg_auth");
     localStorage.removeItem("pg_user");
-    router.push("/login");
+    window.location.href = "/login";
   };
 
   return (
