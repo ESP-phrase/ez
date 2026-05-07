@@ -1,10 +1,25 @@
 import Link from "next/link";
 import { TrendingUp } from "lucide-react";
 
-const links = {
-  Features: ["AI Analyzer", "AI Coach", "Wallet Tracker", "Handpicked Picks"],
-  Tools: ["Paper Trading", "Copy Trading", "Leaderboard", "Dashboard"],
-  Company: ["Blog", "Pricing", "Terms", "Privacy"],
+const links: Record<string, { label: string; href: string }[]> = {
+  Features: [
+    { label: "AI Analyzer", href: "/dashboard" },
+    { label: "BTC Edge", href: "/dashboard/btc-edge" },
+    { label: "Copy Trading", href: "/dashboard/copy-trading" },
+    { label: "Paper Trading", href: "/dashboard/paper-trading" },
+  ],
+  Tools: [
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Start for $1", href: "/start" },
+    { label: "Login", href: "/login" },
+    { label: "Account", href: "/dashboard/settings" },
+  ],
+  Company: [
+    { label: "Pricing", href: "/#pricing" },
+    { label: "Terms", href: "/terms" },
+    { label: "Privacy", href: "/privacy" },
+    { label: "Contact", href: "mailto:support@polygoat.io" },
+  ],
 };
 
 export default function Footer() {
@@ -31,9 +46,9 @@ export default function Footer() {
               <p className="text-[10px] font-bold text-white/25 uppercase tracking-widest mb-4">{cat}</p>
               <ul className="space-y-2.5">
                 {items.map((item) => (
-                  <li key={item}>
-                    <Link href="/login" className="text-sm text-white/40 hover:text-white/70 transition-colors">
-                      {item}
+                  <li key={item.label}>
+                    <Link href={item.href} className="text-sm text-white/40 hover:text-white/70 transition-colors">
+                      {item.label}
                     </Link>
                   </li>
                 ))}

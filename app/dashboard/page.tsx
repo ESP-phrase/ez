@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Sidebar from "@/components/dashboard/sidebar";
 import AnalyzerPanel from "@/components/dashboard/analyzer-panel";
@@ -19,9 +19,12 @@ import {
   Activity,
   DollarSign,
   LogOut,
+  PartyPopper,
+  X,
+  Settings,
 } from "lucide-react";
 
-interface User { email: string; name: string }
+interface User { email: string; name: string; plan?: string }
 
 const MOCK_PICKS = [
   { market: "Will the Fed cut rates in June 2026?", platform: "Polymarket", confidence: 82, verdict: "YES", edge: "+14%" },
@@ -80,11 +83,44 @@ function ConfidenceBadge({ value }: { value: number }) {
   return <span className={`px-2 py-0.5 rounded-full border text-[11px] font-bold ${cls}`}>{value}%</span>;
 }
 
-export default function DashboardPage() {
+function SuccessBanner({ sessionId, onDismiss }: { sessionId: string; onDismiss: () => void }) {
+  useEffect(() => {
+    fetch(`/api/stripe/success?session_id=${sessionId}`)
+      .then((r) => r.json())
+      .then((data: { plan?: string }) => {
+        if (data.plan) {
+          try {
+            const raw = localStorage.getItem("pg_user");
+            const u = raw ? JSON.parse(raw) : {};
+            localStorage.setItem("pg_user", JSON.stringify({ ...u, plan: data.plan }));
+          } catch { /* ignore */ }
+        }
+      })
+      .catch(() => { /* ignore */ });
+  }, [sessionId]);
+
+  return (
+    <div className="mx-8 mt-4 flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 px-5 py-3.5">
+      <PartyPopper className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+      <p className="flex-1 text-sm font-semibold text-emerald-800">
+        🎉 Welcome to Pro! Your subscription is active — all features are now unlocked.
+      </p>
+      <button onClick={onDismiss} className="text-emerald-500 hover:text-emerald-700 transition-colors">
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
+function DashboardInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(!!sessionId);
 
   useEffect(() => {
     setMounted(true);
@@ -101,7 +137,14 @@ export default function DashboardPage() {
     } catch {
       setUser({ email: "trader@polygoat.io", name: "trader" });
     }
-  }, [router]);
+
+    // Clean session_id from URL without page reload
+    if (sessionId) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("session_id");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [router, sessionId]);
 
   if (!mounted || !user) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -109,6 +152,7 @@ export default function DashboardPage() {
     </div>
   );
 
+  const isPro = user.plan === "PRO" || user.plan === "ELITE";
   const displayName = user.name.charAt(0).toUpperCase() + user.name.slice(1);
   const initials = user.name.slice(0, 2).toUpperCase();
 
@@ -135,9 +179,26 @@ export default function DashboardPage() {
               <Bell className="w-4 h-4 text-slate-500" />
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 ring-2 ring-white" />
             </button>
-            <button onClick={() => setShowUpgrade(true)} className="px-3 py-2 rounded-xl border border-blue-200 bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-all">
-              Start trial
-            </button>
+            {!isPro && (
+              <button
+                onClick={() => setShowUpgrade(true)}
+                className="px-3 py-2 rounded-xl border border-blue-200 bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-all"
+              >
+                Start trial
+              </button>
+            )}
+            {isPro && (
+              <span className="px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold">
+                PRO ✓
+              </span>
+            )}
+            <Link
+              href="/dashboard/settings"
+              className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center hover:border-slate-300 transition-all"
+              title="Settings"
+            >
+              <Settings className="w-4 h-4 text-slate-400" />
+            </Link>
             <div className="flex items-center gap-1.5 cursor-pointer group rounded-xl border border-slate-200 bg-white px-2 py-1.5">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-[11px] font-bold text-white">
                 {initials}
@@ -153,6 +214,27 @@ export default function DashboardPage() {
             </button>
           </div>
         </header>
+
+        {/* Post-payment success banner */}
+        {showSuccess && sessionId && (
+          <SuccessBanner sessionId={sessionId} onDismiss={() => setShowSuccess(false)} />
+        )}
+
+        {/* Free user upgrade nudge */}
+        {!isPro && !showSuccess && (
+          <div className="mx-8 mt-4 flex items-center justify-between rounded-xl bg-blue-50 border border-blue-200 px-5 py-3">
+            <div className="flex items-center gap-2.5">
+              <Zap className="w-4 h-4 text-blue-600 flex-shrink-0" />
+              <p className="text-sm text-blue-800 font-medium">You&apos;re on the free plan. Unlock all features for just <strong>$1</strong> your first month.</p>
+            </div>
+            <button
+              onClick={() => setShowUpgrade(true)}
+              className="ml-4 flex-shrink-0 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-all"
+            >
+              Upgrade
+            </button>
+          </div>
+        )}
 
         <main className="flex-1 p-8 space-y-6 max-w-5xl mx-auto w-full">
 
@@ -238,5 +320,17 @@ export default function DashboardPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="w-5 h-5 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" />
+      </div>
+    }>
+      <DashboardInner />
+    </Suspense>
   );
 }

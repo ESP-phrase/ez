@@ -9,6 +9,7 @@ import {
   Zap,
   TestTube2,
   LogOut,
+  Settings,
 } from "lucide-react";
 import GoatLogo from "@/components/goat-logo";
 
@@ -116,6 +117,19 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Settings */}
+      <Link
+        href="/dashboard/settings"
+        className={`group w-full rounded-xl flex items-center gap-3 px-3 py-2.5 transition-all ${
+          pathname === "/dashboard/settings" ? "bg-white/8" : "hover:bg-white/6"
+        }`}
+      >
+        <span className="w-8 h-8 rounded-lg bg-white/6 flex items-center justify-center flex-shrink-0 transition-all duration-200 group-hover:-translate-y-1 group-hover:scale-110">
+          <Settings className="w-4 h-4 text-white/30 group-hover:text-slate-300 transition-colors" />
+        </span>
+        <span className="text-sm font-medium text-white/30 group-hover:text-slate-300 transition-colors">Settings</span>
+      </Link>
 
       {/* Logout */}
       <button

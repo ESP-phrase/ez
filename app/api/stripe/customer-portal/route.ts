@@ -4,30 +4,31 @@ import { db } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await request.json();
+    const body = await request.json() as { userId?: string; email?: string };
+    const { userId, email } = body;
 
-    if (!userId) {
+    if (!userId && !email) {
       return NextResponse.json(
-        { error: "User ID required" },
+        { error: "User ID or email required" },
         { status: 400 }
       );
     }
 
-    const user = await db.user.findUnique({
-      where: { id: userId },
+    const user = await db.user.findFirst({
+      where: userId ? { id: userId } : { email: email!.toLowerCase().trim() },
       select: { stripeCustomerId: true },
     });
 
     if (!user?.stripeCustomerId) {
       return NextResponse.json(
-        { error: "No Stripe customer found" },
+        { error: "No active subscription found. Please subscribe first." },
         { status: 404 }
       );
     }
 
     const session = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/dashboard`,
+      return_url: `${process.env.NEXT_PUBLIC_URL || "http://localhost:3000"}/dashboard/settings`,
     });
 
     return NextResponse.json({ url: session.url });
