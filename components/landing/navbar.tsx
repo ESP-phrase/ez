@@ -22,10 +22,10 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       scrolled
-        ? "bg-[#030b18]/90 backdrop-blur-xl border-b border-white/8 shadow-lg shadow-black/30"
-        : "bg-transparent"
+        ? "bg-[#030b18]/95 backdrop-blur-xl border-b border-white/8 shadow-xl shadow-black/40"
+        : "bg-transparent border-b border-transparent"
     }`}>
       <div className="max-w-7xl mx-auto px-6 w-full">
         <div className="flex items-center justify-between h-16">
