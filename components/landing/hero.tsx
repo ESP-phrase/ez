@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Star, Shield, Users } from "lucide-react";
 
 export default function Hero() {
@@ -61,40 +60,6 @@ export default function Hero() {
         <div className="flex items-center gap-1.5"><Users className="w-3 h-3 text-blue-400" /><span className="text-white/60">Polymarket, Kalshi & more</span></div>
       </div>
 
-      {/* ── Real Dashboard Screenshot ── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 animate-float">
-        {/* Browser chrome wrapper */}
-        <div className="rounded-2xl border border-white/10 overflow-hidden shadow-2xl shadow-black/70 ring-1 ring-white/5">
-          {/* Fake browser bar */}
-          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/8" style={{ background: "#0d1526" }}>
-            <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-              <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-            </div>
-            <div className="flex-1 mx-4 h-5 rounded-md bg-white/5 flex items-center justify-center">
-              <span className="text-[10px] text-white/30">app.polygoat.io/dashboard</span>
-            </div>
-          </div>
-          {/* Screenshot */}
-          <Image
-            src="/dashboard-preview.png"
-            alt="PolyGoat dashboard — AI market analysis, copy trading, BTC signals"
-            width={1512}
-            height={900}
-            className="w-full h-auto block"
-            priority
-          />
-        </div>
-
-        {/* Floating badges */}
-        <div className="absolute -top-4 -right-4 sm:-right-2 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-900/40 border border-emerald-400/30">
-          73% Win Rate
-        </div>
-        <div className="absolute -bottom-4 -left-4 sm:-left-2 bg-gradient-to-br from-blue-600 to-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-blue-900/40 border border-blue-400/30">
-          Live BTC Signal ⚡
-        </div>
-      </div>
     </section>
   );
 }
