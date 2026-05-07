@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     // Send email
     const { error } = await resend.emails.send({
-      from: "PolyGoat <noreply@polygoat.app>",
+      from: "PolyGoat <onboarding@resend.dev>",
       to: emailLower,
       subject: `Your PolyGoat login code: ${code}`,
       html: `
@@ -54,8 +54,8 @@ export async function POST(req: Request) {
     });
 
     if (error) {
-      console.error("Resend error:", error);
-      return NextResponse.json({ error: "Failed to send email." }, { status: 500 });
+      console.error("Resend error:", JSON.stringify(error));
+      return NextResponse.json({ error: `Failed to send email: ${error.message}` }, { status: 500 });
     }
 
     return NextResponse.json({ ok: true });
