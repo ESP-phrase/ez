@@ -14,7 +14,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="hero-bg relative overflow-hidden min-h-screen flex flex-col items-center justify-start text-center px-4 pt-20 pb-24">
+    <section className="hero-bg relative overflow-hidden flex flex-col items-center justify-start text-center px-4 pt-20 pb-16">
       {/* Background effects */}
       <div className="pointer-events-none absolute inset-0 animate-hero-grid opacity-20 [background-image:linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] [background-size:48px_48px]" />
       <div className="pointer-events-none absolute -top-20 -left-16 h-72 w-72 rounded-full bg-blue-500/25 blur-3xl animate-hero-orb" />
@@ -24,12 +24,6 @@ export default function Hero() {
         {sparkles.map((s) => (
           <span key={`${s.top}-${s.left}`} className={`absolute ${s.size} text-blue-200/80 animate-hero-twinkle select-none`} style={{ top: s.top, left: s.left, animationDelay: s.delay }}>✦</span>
         ))}
-      </div>
-
-      {/* Badge */}
-      <div className="relative z-10 mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-400/25 bg-blue-600/10 text-blue-100 text-xs font-medium tracking-wide">
-        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 ring-2 ring-white/20 animate-pulse" />
-        Trusted by over 300 traders worldwide
       </div>
 
       <h1 className="relative z-10 max-w-3xl text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] tracking-tight mb-7">
