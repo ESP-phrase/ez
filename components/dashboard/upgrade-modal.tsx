@@ -59,14 +59,14 @@ export default function UpgradeModal({ onClose, userEmail, userName }: Props) {
         {/* Badge */}
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/15 border border-blue-400/20 text-blue-400 text-[11px] font-semibold mb-3">
           <Zap className="w-3 h-3 fill-blue-400" />
-          LIMITED — First month $1
+          30-DAY FREE TRIAL — Then $39/mo
         </div>
 
         {/* Headline */}
         <h2 className="text-xl font-extrabold text-white leading-tight mb-1 tracking-tight">
           Start winning on prediction markets
         </h2>
-        <p className="text-white/35 text-xs mb-4">Join 300+ traders using AI to find edge every day.</p>
+        <p className="text-white/35 text-xs mb-4">Try everything free for 30 days. Cancel before then and pay nothing.</p>
 
         {/* Features */}
         <div className="space-y-1.5 mb-4">
@@ -99,8 +99,8 @@ export default function UpgradeModal({ onClose, userEmail, userName }: Props) {
         <div className="flex items-center justify-between rounded-xl bg-blue-600/10 border border-blue-400/20 px-4 py-3 mb-3">
           <span className="text-white font-semibold text-sm">Pro Plan</span>
           <div>
-            <span className="text-2xl font-extrabold text-white">$1</span>
-            <span className="text-white/35 text-xs"> / first month · then $39</span>
+            <span className="text-2xl font-extrabold text-white">Free</span>
+            <span className="text-white/35 text-xs"> 30 days · then $39/mo</span>
           </div>
         </div>
 
@@ -116,7 +116,7 @@ export default function UpgradeModal({ onClose, userEmail, userName }: Props) {
           {loading ? (
             <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
           ) : (
-            <>Start my $1 trial <ArrowRight className="w-4 h-4" /></>
+            <>Start free trial <ArrowRight className="w-4 h-4" /></>
           )}
         </button>
 
