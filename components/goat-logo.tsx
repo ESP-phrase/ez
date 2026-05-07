@@ -3,61 +3,46 @@ export default function GoatLogo({ size = 32, className = "" }: { size?: number;
     <svg
       width={size}
       height={size}
-      viewBox="0 0 40 44"
+      viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Left horn — sweeps back and up */}
+      {/* Left horn */}
       <path
-        d="M14.5 18C12.5 13.5 9 7.5 6.5 3C5.5 1 7 0 8.5 1C10 2 10.5 5.5 11 8.5C11.5 11.5 13 15 16 17.5Z"
+        d="M13 16C11 11.5 8.5 6 6 2C5 0.5 6.5 -0.5 8 0.5C9.5 1.5 10 5 10.5 8C11 11 12.5 14 15 16Z"
         fill="white"
       />
-      {/* Left horn inner shadow line */}
-      <path
-        d="M13 15C11.5 11 9.5 6.5 8.5 3C9.5 4 11 8 12.5 13Z"
-        fill="rgba(0,0,0,0.15)"
-      />
+      {/* Left horn shadow */}
+      <path d="M12 13C10.5 9 8.5 4.5 7.5 1.5C8.5 2.5 10 7 11.5 12Z" fill="rgba(0,0,0,0.12)" />
 
-      {/* Right horn — mirror */}
+      {/* Right horn */}
       <path
-        d="M25.5 18C27.5 13.5 31 7.5 33.5 3C34.5 1 33 0 31.5 1C30 2 29.5 5.5 29 8.5C28.5 11.5 27 15 24 17.5Z"
+        d="M27 16C29 11.5 31.5 6 34 2C35 0.5 33.5 -0.5 32 0.5C30.5 1.5 30 5 29.5 8C29 11 27.5 14 25 16Z"
         fill="white"
       />
-      <path
-        d="M27 15C28.5 11 30.5 6.5 31.5 3C30.5 4 29 8 27.5 13Z"
-        fill="rgba(0,0,0,0.15)"
-      />
+      <path d="M28 13C29.5 9 31.5 4.5 32.5 1.5C31.5 2.5 30 7 28.5 12Z" fill="rgba(0,0,0,0.12)" />
 
       {/* Left ear */}
-      <path
-        d="M7.5 22C5 19.5 3.5 24 5.5 25.5C7 26.5 10 25.5 9 22.5C8.5 21 7.5 22 7.5 22Z"
-        fill="white"
-      />
+      <path d="M6.5 20C4 17.5 2.5 22 4.5 23.5C6 24.5 9 23.5 8 20.5C7.5 19 6.5 20 6.5 20Z" fill="white" />
 
       {/* Right ear */}
-      <path
-        d="M32.5 22C35 19.5 36.5 24 34.5 25.5C33 26.5 30 25.5 31 22.5C31.5 21 32.5 22 32.5 22Z"
-        fill="white"
-      />
+      <path d="M33.5 20C36 17.5 37.5 22 35.5 23.5C34 24.5 31 23.5 32 20.5C32.5 19 33.5 20 33.5 20Z" fill="white" />
 
       {/* Face */}
-      <ellipse cx="20" cy="28" rx="12" ry="13" fill="white" />
+      <ellipse cx="20" cy="26" rx="12" ry="13" fill="white" />
 
       {/* Muzzle */}
-      <ellipse cx="20" cy="34.5" rx="7" ry="5" fill="rgba(148,163,184,0.22)" />
+      <ellipse cx="20" cy="32" rx="7" ry="4.5" fill="rgba(148,163,184,0.22)" />
 
-      {/* Left eye — rectangular pupil (real goat characteristic) */}
-      <rect x="13.5" y="27" width="4" height="2.5" rx="1" fill="#0f172a" />
+      {/* Left eye */}
+      <rect x="13" y="24.5" width="4" height="2.5" rx="1" fill="#0f172a" />
 
       {/* Right eye */}
-      <rect x="22.5" y="27" width="4" height="2.5" rx="1" fill="#0f172a" />
+      <rect x="23" y="24.5" width="4" height="2.5" rx="1" fill="#0f172a" />
 
-      {/* Chin beard tuft */}
-      <path
-        d="M16.5 41C16 43.5 17.5 44 20 44C22.5 44 24 43.5 23.5 41C22.5 39.5 17.5 39.5 16.5 41Z"
-        fill="white"
-      />
+      {/* Beard */}
+      <path d="M15.5 38C15 40 16.5 40.5 20 40.5C23.5 40.5 25 40 24.5 38C23.5 36.5 16.5 36.5 15.5 38Z" fill="white" />
     </svg>
   );
 }
