@@ -21,6 +21,8 @@ function genId(prefix: string) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function rdt(...args: unknown[]) { try { (window as any).rdt?.(...args); } catch { /* ignore */ } }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ttq(...args: unknown[]) { try { (window as any).ttq?.track?.(...(args as [string, ...unknown[]])); } catch { /* ignore */ } }
 
 export default function StartPage() {
   const [email, setEmail] = useState("");
@@ -30,6 +32,7 @@ export default function StartPage() {
   // Fire pixel + PostHog events on page load
   useEffect(() => {
     rdt("track", "ViewContent", { conversionId: genId("view_trial") });
+    ttq("ViewContent", { content_type: "product", content_name: "PolyGoat PRO Trial", value: 1.00, currency: "USD" });
     posthog.capture("viewed_start_page");
   }, []);
 
@@ -37,8 +40,9 @@ export default function StartPage() {
     e.preventDefault();
     if (!email || !email.includes("@")) { setError("Enter a valid email."); return; }
 
-    // Fire AddToCart + PostHog when user submits email
+    // Fire AddToCart + InitiateCheckout + PostHog when user submits email
     rdt("track", "AddToCart", { conversionId: genId("add_to_cart") });
+    ttq("InitiateCheckout", { content_type: "product", content_name: "PolyGoat PRO Trial", value: 1.00, currency: "USD" });
     posthog.capture("checkout_initiated", { email });
 
     setLoading(true);
@@ -155,7 +159,7 @@ export default function StartPage() {
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
               ) : (
-                <>Start winning for $1 <ArrowRight className="w-4 h-4" /></>
+                <>Get started for $1 <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>

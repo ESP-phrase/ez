@@ -6,50 +6,50 @@ const testimonials = [
     name: "Marcus T.",
     handle: "@sharpblocks",
     photo: "https://i.pravatar.cc/150?u=sharpblocks42",
-    text: "Made back my subscription in the first day. The AI flagged a mispriced election market I never would've caught on my own.",
-    profit: "+$1,240",
+    text: "The AI flagged a mispriced election market I never would've caught on my own. PolyGoat surfaces opportunities I'd have completely missed.",
+    badge: "AI Analyzer",
   },
   {
     name: "Priya K.",
     handle: "@priyatrades",
     photo: "https://i.pravatar.cc/150?u=priyatrades99",
-    text: "Copy trading is a game changer. I set it to mirror two top wallets and just let it run. Up 34% this month with zero effort.",
-    profit: "+$890",
+    text: "Copy trading is a game changer. I set it to mirror top wallets and track exactly how the best traders are positioning — super useful.",
+    badge: "Copy Trading",
   },
   {
     name: "James R.",
     handle: "@jrpoly",
     photo: "https://i.pravatar.cc/150?u=jrpoly17",
-    text: "The daily picks alone are worth the subscription. 7 out of 10 winners this week — nothing else comes close to this accuracy.",
-    profit: "+$2,100",
+    text: "The daily analyst picks are well-reasoned and give me a solid starting point for my own research. Saves hours every morning.",
+    badge: "Daily Picks",
   },
   {
     name: "Sofia M.",
     handle: "@sofiabets",
     photo: "https://i.pravatar.cc/150?u=sofiabets55",
-    text: "Paper trading first gave me real confidence. Two weeks in simulation, then went live and hit three consecutive winners.",
-    profit: "+$430",
+    text: "Paper trading first gave me real confidence to understand markets before going live. The simulator is surprisingly realistic.",
+    badge: "Paper Trading",
   },
   {
     name: "Derek W.",
     handle: "@derekw_pm",
     photo: "https://i.pravatar.cc/150?u=derekwpm83",
-    text: "PolyGoat's confidence scores are eerily accurate. I only bet above 75% confidence now and my win rate speaks for itself.",
-    profit: "+$3,650",
+    text: "PolyGoat's confidence scores help me prioritize which markets are worth analyzing in depth. Much better signal-to-noise ratio.",
+    badge: "AI Analyzer",
   },
   {
     name: "Aisha B.",
     handle: "@aisha_pmtrader",
     photo: "https://i.pravatar.cc/150?u=aishapmtrader61",
-    text: "Was skeptical. Then the AI surfaced a news event before the market moved. That single trade covered 6 months of the subscription.",
-    profit: "+$780",
+    text: "The AI surfaced a news event before the market had priced it in. That kind of edge in information is exactly what I was looking for.",
+    badge: "BTC Edge",
   },
 ];
 
 const stats = [
   { value: "300+", label: "Active Traders", icon: TrendingUp, color: "text-blue-400", bg: "bg-blue-500/10 border-blue-400/20" },
-  { value: "$4.2M+", label: "Profits Generated", icon: DollarSign, color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-400/20" },
-  { value: "73%", label: "Avg Win Rate", icon: BarChart2, color: "text-violet-400", bg: "bg-violet-500/10 border-violet-400/20" },
+  { value: "$4.2M+", label: "Tracked Volume", icon: DollarSign, color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-400/20" },
+  { value: "<10s", label: "AI Analysis Time", icon: BarChart2, color: "text-violet-400", bg: "bg-violet-500/10 border-violet-400/20" },
   { value: "4.9 / 5", label: "User Rating", icon: Award, color: "text-amber-400", bg: "bg-amber-500/10 border-amber-400/20" },
 ];
 
@@ -62,11 +62,11 @@ export default function SocialProof() {
             Trader Results
           </p>
           <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-4 tracking-tight">
-            Traders are winning{" "}
-            <span className="text-gradient">every day</span>
+            Traders love{" "}
+            <span className="text-gradient">PolyGoat</span>
           </h2>
           <p className="text-white/45 max-w-lg mx-auto text-sm">
-            Real results from real traders. No cherry-picking — these are from our verified user base.
+            See what prediction market traders are saying about our tools.
           </p>
         </div>
 
@@ -111,7 +111,7 @@ export default function SocialProof() {
                     <p className="text-xs text-white/30">{t.handle}</p>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-emerald-400">{t.profit}</span>
+                <span className="text-[10px] font-semibold text-blue-400 bg-blue-500/10 border border-blue-400/20 px-2 py-0.5 rounded-full">{t.badge}</span>
               </div>
             </div>
           ))}

@@ -103,7 +103,7 @@ function SuccessBanner({ sessionId, onDismiss }: { sessionId: string; onDismiss:
           try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const ttq = (window as any).ttq;
-            if (ttq) ttq.track("Subscribe", { value: 1.00, currency: "USD" });
+            if (ttq) ttq.track("CompletePayment", { value: 1.00, currency: "USD", content_type: "product", content_name: "PolyGoat PRO Trial" });
           } catch { /* ignore */ }
 
           // Reddit conversion event

@@ -36,7 +36,7 @@ export default function Hero() {
 
       <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
         <Link href="/start" className="group flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-sm hover:from-blue-500 hover:to-blue-400 transition-all shadow-lg shadow-blue-950/60 ring-1 ring-blue-400/25">
-          Start winning for $1 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          Get started for $1 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
         </Link>
         <Link href="#features" className="px-8 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white/80 font-medium text-sm hover:bg-white/10 hover:border-white/25 transition-all">
           See how it works
@@ -154,8 +154,8 @@ export default function Hero() {
         <div className="mt-8 flex flex-wrap justify-center gap-6 sm:gap-12">
           {[
             { value: "300+", label: "Active traders" },
-            { value: "73%",  label: "Avg win rate" },
-            { value: "$4.2M+", label: "Tracked profits" },
+            { value: "4.9★",  label: "User rating" },
+            { value: "$4.2M+", label: "Tracked volume" },
             { value: "<10s", label: "AI analysis time" },
           ].map((s) => (
             <div key={s.label} className="text-center">

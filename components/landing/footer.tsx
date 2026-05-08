@@ -57,9 +57,14 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="border-t border-white/5 pt-7 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/20">© 2026 PolyGoat. All rights reserved.</p>
-          <p className="text-xs text-white/20">PolyGoat never touches your funds. Trade responsibly.</p>
+        <div className="border-t border-white/5 pt-7 flex flex-col gap-4">
+          <p className="text-[11px] text-white/20 leading-relaxed max-w-4xl">
+            <strong className="text-white/30">Risk Disclaimer:</strong> Prediction market trading involves risk and is not suitable for everyone. Past performance of any analysis, picks, or signals is not indicative of future results. PolyGoat provides informational tools only and does not constitute financial, investment, or trading advice. Always trade responsibly and only with funds you can afford to lose.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-white/20">© 2026 PolyGoat. All rights reserved.</p>
+            <p className="text-xs text-white/20">PolyGoat never touches your funds. For informational purposes only.</p>
+          </div>
         </div>
       </div>
     </footer>

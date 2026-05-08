@@ -10,7 +10,7 @@ const proFeatures = [
   "Copy Trading — mirror top wallets",
   "Daily Winning Picks from analysts",
   "Real-Time Alerts when odds shift",
-  "Smart Risk Scoring per bet",
+  "Smart Risk Scoring per position",
   "AI Strategy Coach",
   "Paper Trading simulator",
   "Wallet Tracker & Leaderboard",
@@ -31,7 +31,7 @@ const eliteFeatures = [
 
 const trustPoints = [
   { icon: Shield, label: "We never touch your funds", sub: "Read-only API access only" },
-  { icon: TrendingUp, label: "73% average win rate", sub: "Verified across all picks" },
+  { icon: TrendingUp, label: "AI-powered market insights", sub: "Analyzes thousands of data points" },
   { icon: Users, label: "300+ active traders", sub: "Growing community" },
 ];
 
@@ -88,7 +88,7 @@ export default function Pricing() {
             ))}
             <div className="surface-card rounded-xl p-5">
               <div className="flex gap-0.5 mb-3">{[...Array(5)].map((_, i) => <span key={i} className="text-amber-400 text-xs">★</span>)}</div>
-              <p className="text-white/55 text-sm leading-relaxed italic">&ldquo;Made back my subscription in the first day. The AI flagged a mispriced market I&apos;d never have caught.&rdquo;</p>
+              <p className="text-white/55 text-sm leading-relaxed italic">&ldquo;The AI flagged a mispriced election market I never would&apos;ve caught on my own. PolyGoat surfaces opportunities I&apos;d have completely missed.&rdquo;</p>
               <p className="text-xs text-white/30 mt-3">— Marcus T., @sharpblocks</p>
             </div>
           </div>
@@ -172,7 +172,7 @@ export default function Pricing() {
 
               {/* Value prop */}
               <div className="mb-5 p-2.5 rounded-xl bg-amber-500/8 border border-amber-400/15 text-xs text-amber-300/70">
-                🏆 Average Elite member earns <span className="font-bold text-amber-300">+$3,200/mo</span> — 32× the subscription cost
+                🏆 Everything in Pro, plus priority AI models, private Discord, and 1-on-1 strategy coaching
               </div>
 
               <ul className="space-y-2 mb-6">

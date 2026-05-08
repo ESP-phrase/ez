@@ -14,7 +14,7 @@ export default function TestimonialCta() {
         </div>
 
         <blockquote className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-10 tracking-tight">
-          &ldquo;Made back the $1 in the first 10 minutes. The AI flagged a mispriced market I&apos;d never have caught on my own.&rdquo;
+          &ldquo;The AI flagged a mispriced election market I never would&apos;ve caught on my own. PolyGoat surfaces opportunities I&apos;d have completely missed.&rdquo;
         </blockquote>
 
         {/* Avatar + name */}
@@ -27,8 +27,8 @@ export default function TestimonialCta() {
           </div>
           <div className="text-left">
             <p className="text-white font-bold text-base">Marcus T.</p>
-            <p className="text-emerald-400 text-sm font-semibold">+$1,240 this month</p>
-            <p className="text-white/30 text-xs">@sharpblocks · Verified trader</p>
+            <p className="text-blue-400 text-sm font-semibold">Polymarket trader</p>
+            <p className="text-white/30 text-xs">@sharpblocks · PolyGoat member</p>
           </div>
         </div>
 
@@ -38,7 +38,7 @@ export default function TestimonialCta() {
             href="/start"
             className="group inline-flex items-center gap-2.5 px-10 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-base hover:from-blue-500 hover:to-blue-400 transition-all shadow-xl shadow-blue-950/60 ring-1 ring-blue-400/25"
           >
-            Start winning for $1
+            Get started for $1
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
           <p className="text-white/25 text-xs">First month $1 · Then $39/mo · Cancel anytime</p>

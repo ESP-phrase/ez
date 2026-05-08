@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | PolyGoat",
   },
   description:
-    "PolyGoat gives prediction market traders an unfair edge. AI market analysis, expert daily picks, copy trading, and real-time BTC signals — all in one platform. Start for $1.",
+    "AI-powered tools for smarter prediction market trading. Market analysis, expert daily picks, copy trading, and real-time BTC signals — all in one platform. Try for $1.",
   keywords: [
     "polymarket",
     "kalshi",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     siteName: "PolyGoat",
     title: "PolyGoat — AI Trading Tools for Polymarket & Kalshi",
     description:
-      "Get an unfair edge on prediction markets. AI analysis, expert picks, copy trading, and live BTC signals. Trusted by 300+ traders. Start for $1.",
+      "AI tools for smarter prediction market trading. Analysis, expert picks, copy trading, and live BTC signals. Trusted by 300+ traders. Try for $1.",
     images: [
       {
         url: "/og-image.png",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "PolyGoat — AI Trading Tools for Polymarket & Kalshi",
     description:
-      "Get an unfair edge on prediction markets. AI analysis, expert picks, copy trading, and live BTC signals. Start for $1.",
+      "AI tools for smarter prediction market trading. Analysis, expert picks, copy trading, and live BTC signals. Try for $1.",
     images: ["/og-image.png"],
     creator: "@polygoat",
   },
