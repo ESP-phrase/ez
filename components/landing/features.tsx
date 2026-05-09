@@ -41,7 +41,7 @@ const features = [
     id: "picks",
     tag: "Daily AI Picks",
     headline: "Expert picks,\nupdated every morning.",
-    sub: "Curated bets from analysts with proven track records. Skip the noise, bet with conviction.",
+    sub: "Curated picks from analysts with documented track records. Skip the noise, trade with conviction.",
     bullets: [
       { icon: CalendarCheck, text: "Reviewed and published daily by our team" },
       { icon: Zap, text: "Entry price, recommendation, and reasoning included" },
@@ -85,7 +85,7 @@ const features = [
     id: "paper",
     tag: "Paper Trading",
     headline: "Practice risk-free\nbefore going live.",
-    sub: "Simulate real trades with virtual funds. Build confidence and measure your edge before betting real money.",
+    sub: "Simulate real trades with virtual funds. Build confidence and understand markets before going live.",
     bullets: [
       { icon: FlaskConical, text: "Live Polymarket events, virtual balance" },
       { icon: BarChart2, text: "Full P&L dashboard and open positions" },

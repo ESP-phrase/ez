@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     q: "Does it actually work?",
-    a: "Yes. Our AI has been trained on thousands of resolved prediction market events. Our public track record shows a 73% average win rate on high-confidence picks. Results vary, but the edge is real and verifiable.",
+    a: "Our AI has been trained on thousands of resolved prediction market events and surfaces mispricings, probability edges, and supporting news in seconds. Results vary — past performance doesn't guarantee future outcomes, but the tools are built on real data.",
   },
   {
     q: "What makes PolyGoat better than doing my own research?",
@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "Do I need prior experience with prediction markets?",
-    a: "No experience needed. The AI Coach walks beginners through strategy, and paper trading lets you learn risk-free. Most users are profitable within their first two weeks.",
+    a: "No experience needed. The AI Coach walks beginners through strategy, and paper trading lets you practice with virtual funds before going live. It's designed to be approachable for any skill level.",
   },
   {
     q: "Is my money safe?",
