@@ -125,7 +125,7 @@ export default function Hero() {
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0">SB</div>
               <div>
                 <div className="text-sm font-bold text-white">@sharpblocks</div>
-                <div className="text-emerald-400 text-[11px] font-semibold">+$1,240 this month</div>
+                <div className="text-blue-400 text-[11px] font-semibold">Polymarket trader</div>
               </div>
             </div>
             <div className="space-y-2">
@@ -151,7 +151,7 @@ export default function Hero() {
         </div>
 
         {/* Bottom stats bar */}
-        <div className="mt-8 flex flex-wrap justify-center gap-6 sm:gap-12">
+        <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-12 w-full max-w-lg sm:max-w-none mx-auto">
           {[
             { value: "300+", label: "Active traders" },
             { value: "4.9★",  label: "User rating" },
